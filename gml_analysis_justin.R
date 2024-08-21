@@ -34,6 +34,21 @@ str(age_mosq)
 # for the Cyp6p3-------------
 glm_model <- glm(Cyp6p3 ~ `Sample Name` + `Time of the day`, data = age_mosq)
 glm_model <- glm(Cyp6p3 ~ `Sample Name` * `Time of the day`, data = age_mosq)
+
+###################
+# Eric suggestion #
+###################
+# The first of the two lines above is redundant, since it gets replaced by the second
+# line. That's confusing code. I guess what you did was first run the first of the 
+# two lines, and do "drop1", then go back and run the second version, and do "drop1" 
+# again? It's better to write your code in a way that doesn't require interactive 
+# use, where you can run the whole script from start to finish and get what you need.
+# Also, better to avoid name re-use if possible. So rather than calling all your
+# models glm_model, call them glm_model_cyp6p3_age, or something like that. This 
+# reduces the risk of accidental errors, especially if you are running the code 
+# interactively. 
+###################
+
 # Perform model selection using drop1
 drop1(glm_model, test = "F")
 

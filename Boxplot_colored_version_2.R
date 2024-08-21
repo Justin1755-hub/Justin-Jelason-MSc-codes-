@@ -21,6 +21,11 @@ library(readxl)
 age_mosq <- read_excel("gene_expression_data.xlsx",
                        sheet = "Age of the mosquito condition")
 View(gene_expression_data)
+###################
+# Eric Suggestion #
+###################
+# The object gene_expression _data hasn't been created yet, so the above line doesn't work
+###################
 
 age_mosq<- read_excel("gene_expression_data.xlsx",
                       sheet = "Age of the mosquito condition")
@@ -40,6 +45,19 @@ age_mosq$Sample_Time <- paste(age_mosq$`Sample Name`, age_mosq$`Time of the day`
 # Ensure the order of levels for Sample_Time is set as desired
 age_mosq$Sample_Time <- factor(age_mosq$Sample_Time, levels = c("Kisumu 2 Days", "Tiassale 2 Days", "Kisumu 5 Days", "Tiassale 5 Days"),
                                labels = c("Kis 2", "Tia 2", "Kis 5", "Tia 5"))
+###################
+# Eric suggestion #
+###################
+# Your code is good and correst. Just as a suggestion, you made find it useful and neater to use
+# Magritt pipes to chain together commands on the same object. In the situation above, where you 
+# create "Sample_Time" and then modify "Sample_Time", you can use the %>% symbol to chain those
+# commands together. This is called piping, and looks like this (and give the exact same result
+# as your code):
+#library(magrittr)
+#age_mosq$Sample_Time <- paste(age_mosq$`Sample Name`, age_mosq$`Time of the day`, sep = " ") %>%
+#                        factor(levels = c("Kisumu 2 Days", "Tiassale 2 Days", "Kisumu 5 Days", "Tiassale 5 Days"))
+###################
+
 
 
 # Plot for age_mosq dataset with multiple comparisons
@@ -58,6 +76,15 @@ age_cyp6p3 <- ggplot(data = age_mosq,
                                                                                   "Tia 2" = "cornflowerblue", "Tia 5" = "cornflowerblue")) +
   theme_minimal() + theme(legend.position = "none")
 
+###################
+# Eric suggestion #
+###################
+# If you use the "geom_signif" function as above, it will do its own statistical test for significance
+# (by default, it performs a Wilcoxon test), which might not produce the same result (and significance
+# levels) as your own analysis. Have you checked that all the significance levels are the same as your
+# own ones?
+###################
+
 ggsave(filename = "age_cyp6p3.png", plot = age_cyp6p3, device = "png", dpi = 300, width = 10, height = 7)
 
 # Print the plot
@@ -65,10 +92,12 @@ print(age_cyp6p3)
 
 
 
+
 #blood feeding status v gene expression
 
 
 blood_feeding$Sample_Blood <- paste(blood_feeding$`Sample Name`, blood_feeding$`Blood-feeding status`, sep = " ")
+
 # Ensure the order of levels for Sample_Blood is set as desired
 blood_feeding$Sample_Blood <- factor(blood_feeding$Sample_Blood, levels = c("Kisumu Blood-fed", "Tiassale Blood-fed", "Kisumu Non-blood-fed", "Tiassale Non-blood-fed"),
                                      labels = c("Kis BF", "Tia BF", "Kis NBF", "Tia NBF"))
